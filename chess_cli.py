@@ -90,7 +90,8 @@ class Board:
             if self.get(r + forward, c) == '.':
                 moves.append((r + forward, c, None))
                 if r == start_row and self.get(r + 2 * forward, c) == '.':
-                    moves.append((r + 2 * forward, c, 'e' + chr(ord('a') + c)))
+                    ep_square = chr(ord('a') + c) + str(8 - (r + forward))
+                    moves.append((r + 2 * forward, c, ep_square))
             # captures
             for dc in (-1, 1):
                 if enemy(self.get(r + forward, c + dc)):
@@ -172,7 +173,7 @@ class Board:
         self.en_passant = None
         if piece.upper() == 'P' and nr in (0,7):
             self.set(nr, nc, 'Q' if piece.isupper() else 'q')
-        if flag and flag.startswith('e') and len(flag)==2:
+        if flag and len(flag)==2 and flag[0].isalpha() and flag[1].isdigit():
             self.en_passant = flag
         if flag == 'ep':
             self.set(r, nc, '.')
